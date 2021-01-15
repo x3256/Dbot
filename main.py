@@ -80,7 +80,7 @@ async def func_cal(msg,msg_parts):
   if(len(msg_parts)>1):
     for i in msg_parts[1:]:
       try:
-        val += i+" = "+str(eval(i))+"\n"
+        val += i+" = "+str(round(eval(i),2))+"\n"
       except:
         continue
     if(len(val)>0):
