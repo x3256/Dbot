@@ -22,7 +22,6 @@ async def on_message(msg):
   if(msg.content.startswith("$")):
     await command_parser(msg)
 
-
 #utility classes
 
 #generalized command category
