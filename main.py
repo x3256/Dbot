@@ -25,7 +25,6 @@ async def on_message(msg):
 
 #utility classes
 
-
 #generalized command category
 
 class command():
