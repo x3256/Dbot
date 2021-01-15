@@ -8,7 +8,7 @@ import asyncio
 cl = discord.Client()
 #contributers just add your name in the list devs
 devs = ["Danish"]
-source_link = "https://repl.it/join/toxqizmw-danishwaheed200"
+source_link = "https://github.com/x3256/Dbot.git"
 polls = {} 
 
 @cl.event
@@ -110,20 +110,34 @@ async def func_bot(msg,msg_parts):
 async def func_poll(msg,msg_parts):
   txt = "Invalid poll"
   if(len(polls)<1):
-    if(len(msg_parts)>2):
+    txt = cmds["$poll"]["description"]
+    #timer length
+    if(len(msg_parts)>3):
       try:
         timeout = int(msg_parts[1])
+        if(timeout>(60*30)):
+          await msg.channel.send("Poll duration must be less than 30 mins")
+          return
       except:
         await msg.channel.send("Invalid poll command")
         return
       candids = msg.content.split(",")
       l = len(candids)
+      #for identical candidates
+      for i in range(l): #0 ,1 ,2
+        for j in range(i+1,l,1):
+          if(candids[i] == candids[j]):
+            await msg.channel.send("Identical candidates")
+            return
+      if(l<2):
+        await msg.channel.send("Cannot start for single candidate")
+        return
       candids[0] = candids[0][candids[0].find(" ",6)+1:]
-      reason = candids[l-1].split("?")[1]
+      reason = candids[l-1][candids[l-1].find("?")+1:]
       if(len(reason)<1):
         await msg.channel.send("Reason not specified")
         return
-      candids[l-1] = candids[l-1].split("?")[0]
+      candids[l-1] = candids[l-1][:candids[l-1].find("?")]
       txt = reason
       polls[0]={"candidates":candids,"votes":[0]*l,"reason":reason,"winner":"","voted":[]}
       for i in range(len(candids)):
@@ -178,7 +192,7 @@ cmds= {
   },
 
   "$bot":{
-    "description":"Fetch info about DBOT. \nUsage: $bot <params>, params can be devs(contributers), source(link to source)", 
+    "description":"Fetch info about DBOT. \nUsage: $bot <params>, params can be dev(contributers), source(link to source)", 
     "callback":func_bot
   },
   
